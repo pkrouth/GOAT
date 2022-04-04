@@ -1,2 +1,1 @@
-# GOAT
-Graph Ordering Attention Networks (GOAT)
+# Graph Ordering Attention Networks (GOAT)
