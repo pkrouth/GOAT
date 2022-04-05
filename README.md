@@ -26,7 +26,7 @@ python train.py --goat_imp4 True
 
 ## Contribution
 #### Authors: 
-+ Michail Chatzianastasis (mixalisx97@gmail.com)
++ Michail Chatzianastasis 
 + Johannes F. Lutzeyer
 + George Dasoulas
 + Michalis Vazirgiannis
