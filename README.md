@@ -5,7 +5,7 @@
 This repository is the official implementation of [*Graph Ordering Attention Networks*](add arxiv link).
 
 <div align=center>
-<img src=https://github.com/MichailChatzianastasis/GOAT/blob/main/figures/goat_model_fig.jpg width="70%">
+<img src=https://github.com/MichailChatzianastasis/GOAT/blob/main/figures/goat_model_fig.jpg width="90%">
 </div>
 
 ## Abstract
