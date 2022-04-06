@@ -27,7 +27,7 @@ from utils2 import load_data2,load_extra_data, load_ogbn_arxiv,load_lastfm_asia,
 from synthetic_dataset import create_synthetic_dataset, construct_stochastic_blockmodel
 from torch_geometric.data import DataLoader
 import sys
-from models import ADSF, RWR_process
+
 from torch_geometric.utils import degree
 
 sys.path.append('./wlhgnn')
