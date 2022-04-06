@@ -23,7 +23,6 @@ import networkx as nx
 from utils import load_data, accuracy
 from models import GAT, GIN, SpGAT, GATorderedDeep, MLP, GATv2ConvOrdered,GATV2, GATordered, GATorderedIMP4 ,GATordered_shared_LSTM, PNA, GCN, GraphSAGE, GATRandomOrdered,GATIMP4, GATorderedIMP4_node_batching, GATorderedGraphClassification_LSTM_graph_pooling
 from utils2 import load_data2,load_extra_data, load_ogbn_arxiv,load_lastfm_asia,load_disease,load_email_eu,load_amazon, load_data_adsf
-from synthetic_dataset import create_synthetic_dataset, construct_stochastic_blockmodel
 from torch_geometric.data import DataLoader
 import sys
 
@@ -228,23 +227,6 @@ elif(args.dataset == "email_eu"):
     idx_val = torch.LongTensor(idx_val)
     idx_test = torch.LongTensor(idx_test)
 
-elif(args.dataset == "sbm"):
-    adj, features, labels, idx_train, idx_val, idx_test = construct_stochastic_blockmodel(args.number_of_nodes, args.number_of_classes, random_idx=args.random_idx)  
-    adj = torch.FloatTensor(np.array(adj.todense()))
-    features = torch.FloatTensor(features)
-    labels = torch.LongTensor(labels)
-    idx_train = torch.LongTensor(idx_train)
-    idx_val = torch.LongTensor(idx_val)
-    idx_test = torch.LongTensor(idx_test)
-
-elif(args.dataset == "largest_2_neighbors"):
-    adj, features, labels, idx_train, idx_val, idx_test = create_synthetic_dataset(dataset_str="largest_2_neighbors",number_of_nodes=args.number_of_nodes, random_state=args.random_idx,central=args.central)  
-    adj = torch.FloatTensor(np.array(adj.todense()))
-    features = torch.FloatTensor(features)
-    labels = torch.LongTensor(labels).squeeze()
-    idx_train = torch.LongTensor(idx_train)
-    idx_val = torch.LongTensor(idx_val)
-    idx_test = torch.LongTensor(idx_test)
 
 elif(args.dataset == "disease_nc"):
     adj, features, labels, idx_train, idx_val, idx_test = load_disease(args.dataset,random_state=args.random_idx)
