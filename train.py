@@ -28,9 +28,7 @@ import sys
 
 from torch_geometric.utils import degree
 
-sys.path.append('./wlhgnn')
-from wlhgnn.model import WLHGNN
-from wlhgnn.centroid_distance import CentroidDistance,PoincareDistance
+
 print("start")
 
 def print_shape(tensor_list):
@@ -67,7 +65,6 @@ parser.add_argument('--mlp', default=False)
 parser.add_argument('--gin', default=False)
 parser.add_argument('--pna', default=False)
 
-parser.add_argument('--wlhgnn', default= False)
 
 parser.add_argument('--edge_index', default=False)
 
@@ -416,16 +413,7 @@ else:
         dataset= args.dataset,
         final_mlp=args.final_mlp)
 
-    elif args.wlhgnn:
-        model = WLHGNN(features.shape[1], 
-                        args.hidden, 
-                        2, 
-                       1, 
-                       "logmap", 
-                       200, 
-                       int(labels.max())+1, 
-                       args.dropout)
-        args.edge_index = True
+ 
 
     elif args.adsf:
         model = ADSF(nfeat=features.shape[1],
@@ -579,7 +567,7 @@ def compute_test(write_results=True):
         with open("./results/results.txt","a") as handle:
             if(args.dataset == "sbm"):
                 handle.write(f'{args.dataset} Number_of_nodes: {args.number_of_nodes} heads:{args.nb_heads} {args.number_of_classes} { type(model).__name__} {args.aggregator_type} hidden:{args.hidden}, outd1:{args.outd_1}, random_idx:{args.random_idx}:  {str(loss_test.item())} , {str(acc_test.item())}')
-            elif(args.gcn or args.mlp or args.gin or args.pna or args.wlhgnn):
+            elif(args.gcn or args.mlp or args.gin or args.pna ):
                 handle.write(f'{args.dataset} { type(model).__name__}  outfeat:{args.hidden}, outd1:{args.outd_1}, random_idx:{args.random_idx}: {str(f1)} {str(loss_test.item())} , {str(acc_test.item())}')
                 #handle.write("\n")
             elif(args.sage):
