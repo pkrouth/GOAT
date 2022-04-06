@@ -81,7 +81,7 @@ parser.add_argument('--pooling_2' , default="cat")
 parser.add_argument('--nb_heads_2', type=int, default=1, help='Number of head attentions in second layer.')
 parser.add_argument('--aggregator_type', default="lstm", help='For GRAPH SAGE ONLY')
 
-parser.add_argument('--dataset' , default="cora")
+parser.add_argument('--dataset' , default="disease_nc")
 parser.add_argument('--final_mlp', default= False)
 parser.add_argument('--impl4', default= False)
 parser.add_argument('--shared', default= False)
