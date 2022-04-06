@@ -54,9 +54,9 @@ parser.add_argument('--nb_heads', type=int, default=8, help='Number of head atte
 parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate (1 - keep probability).')
 parser.add_argument('--alpha', type=float, default=0.2, help='Alpha for the leaky_relu.')
 parser.add_argument('--patience', type=int, default=250, help='Patience')
-parser.add_argument('--ours', default=False)
-parser.add_argument('--ordered', default=False)
-parser.add_argument('--rnn_agg', default="lstm", help='For GOAT --ordered True')
+parser.add_argument('--goat_imp4', default=False)
+parser.add_argument('--goat', default=False)
+parser.add_argument('--rnn_agg', default="lstm", help='For GOAT --goat True')
 
 parser.add_argument('--v2', default=False)
 parser.add_argument('--v3', default=False)
@@ -351,7 +351,7 @@ if args.sparse:
                 nheads=args.nb_heads, 
                 alpha=args.alpha)
 else:
-    if args.ours:
+    if args.goat_imp4:
         model = GATorderedIMP4(nfeat=features.shape[1], 
                 nhid=args.hidden, 
                 nhid_2 = args.hidden_2,
@@ -365,7 +365,7 @@ else:
                 rnn_agg=args.rnn_agg,
                 final_mlp=args.final_mlp)
     
-    elif args.ordered:
+    elif args.goat:
         model = GATordered(nfeat=features.shape[1], 
                 nhid=args.hidden, 
                 nhid_2 = args.hidden_2,
@@ -562,7 +562,7 @@ if args.cuda:
 
 features, adj, labels = Variable(features), Variable(adj), Variable(labels)
 
-if (args.ours or impl4 or args.edge_index) and args.dataset!="ogbn-arxiv" and args.dataset!="Photo" and args.dataset!="Computers": #for ogbn-arxiv we have already edge_index
+if (args.goat_imp4 or impl4 or args.edge_index) and args.dataset!="ogbn-arxiv" and args.dataset!="Photo" and args.dataset!="Computers": #for ogbn-arxiv we have already edge_index
     if(args.dataset=='sbm' or args.dataset=="largest_2_neighbors"):
         edge_index = find_edge_index(adj)
     elif(os.path.isfile(f"{args.dataset}_edge_index")):
@@ -578,7 +578,7 @@ def train(epoch):
     t = time.time()
     model.train()
     optimizer.zero_grad()
-    if(args.ours or impl4 or args.edge_index) or args.dataset =="ogbn-arxiv" or args.dataset =="Photo" or args.dataset =="Computers":
+    if(args.goat_imp4 or impl4 or args.edge_index) or args.dataset =="ogbn-arxiv" or args.dataset =="Photo" or args.dataset =="Computers":
         output = model(features, adj, edge_index)
     elif(args.adsf):
         output = model(features,adj,adj_ad)
@@ -597,7 +597,7 @@ def train(epoch):
         # Evaluate validation set performance separately,
         # deactivates dropout during validation run.
         model.eval()
-        if(args.ours or impl4 or args.edge_index or args.dataset=="ogbn-arxiv"):
+        if(args.goat_imp4 or impl4 or args.edge_index or args.dataset=="ogbn-arxiv"):
             output = model(features, adj, edge_index)
         
         elif(args.adsf):
@@ -620,7 +620,7 @@ def train(epoch):
 
 def compute_test(write_results=True):
     model.eval()
-    if(args.ours or impl4 or args.edge_index or args.dataset=="ogbn-arxiv"):
+    if(args.goat_imp4 or impl4 or args.edge_index or args.dataset=="ogbn-arxiv"):
         output = model(features, adj, edge_index)
     
     elif(args.adsf):
@@ -649,7 +649,7 @@ def compute_test(write_results=True):
                 #handle.write("\n")
             elif(args.sage):
                 handle.write(f'{args.dataset} {args.aggregator_type} {  type(model).__name__}  outfeat:{args.hidden}, outd1:{args.outd_1}, outd2:{args.outd_2}, random_idx:{args.random_idx}: {str(f1)} {str(loss_test.item())} , {str(acc_test.item())}')
-            elif(args.ordered):
+            elif(args.goat):
                 handle.write(f'{args.dataset} { type(model).__name__} aggregator:{args.rnn_agg} {type(model.attentions[0].lstm).__name__} nhid:{args.hidden} nhid_2:{args.hidden_2} lstm_h1:{args.lstm_h1} lstm_h2: {args.lstm_h2} pooling_1: {args.pooling_1} pooling_2: {args.pooling_2} nb_heads: {args.nb_heads} nb_heads2: {args.nb_heads_2} "random_idx":{args.random_idx}: {str(f1)} {str(loss_test.item())}, {str(acc_test.item())}')
             elif hasattr(model.attentions, 'lstm'):
                 handle.write(f'{args.dataset} { type(model).__name__} {type(model.attentions[0].lstm).__name__} nhid:{args.hidden} outd_2:{args.outd_2} pooling_1: {args.pooling_1} nb_heads: {args.nb_heads} "random_idx":{args.random_idx}: {str(f1)} {str(loss_test.item())}, {str(acc_test.item())}')
