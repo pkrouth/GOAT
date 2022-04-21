@@ -2,7 +2,7 @@
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-This repository is the official implementation of [*Graph Ordering Attention Networks*](add arxiv link).
+This repository is the official implementation of [*Graph Ordering Attention Networks*](https://arxiv.org/abs/2204.05351).
 
 <div align=center>
 <img src=https://github.com/MichailChatzianastasis/GOAT/blob/main/figures/goat_model_fig.jpg width="100%">
@@ -34,6 +34,13 @@ python train.py --goat_imp4 True
 
 If you find our repo useful, please cite
 ```
-add citation 
+@misc{chatzianastasis2022graph,
+      title={Graph Ordering Attention Networks}, 
+      author={Michail Chatzianastasis and Johannes F. Lutzeyer and George Dasoulas and Michalis Vazirgiannis},
+      year={2022},
+      eprint={2204.05351},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
 ```
 
