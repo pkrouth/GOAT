@@ -110,17 +110,7 @@ if args.cuda:
 
 def find_edge_index(adj):
     print("find edge index")
-    edge_index = [[],[]]
-    for i in range(adj.shape[0]):
-        for j in range(adj.shape[1]):
-            if(adj[i,j]>0):
-                edge_index[0].append(i)
-                edge_index[1].append(j)
-        if(i%50 ==0):
-            print(i)
-    
-    edge_index = np.array(edge_index)
-    edge_index = torch.tensor(edge_index)
+    edge_index = (adj > 0).nonzero().t()
     with open(f"{args.dataset}_edge_index","wb") as handle:
         pickle.dump(edge_index,handle)
     return edge_index
@@ -258,17 +248,10 @@ if(args.dataset == "ogbn-arxiv" or args.dataset == "Photo" or args.dataset == "C
  
 create_edge_dict =  False
 if(create_edge_dict == True):
-    counter = 0
     edge_dict = {}
     for i in range(adj.shape[0]):
-        for j in range(adj.shape[1]):
-            if(adj[i,j]>0):
-                counter+=1
-                if(i in edge_dict):
-                    edge_dict[i].append(j)
-                else:
-                    edge_dict[i] = [j]
-        print(i,"/",adj.shape[0])
+        edge_dict[i] = list((adj[i] > 0).nonzero().t().numpy().tolist())[0]
+       print(i,"/",adj.shape[0])
     with open(f'./{args.dataset}_edge_dict', 'wb') as handle:
         pickle.dump(edge_dict,handle)
     print("found edges",counter)
